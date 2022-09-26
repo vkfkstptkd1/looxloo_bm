@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 위 코드가 mapper 설정을 하는 코드 -->
+
+<!-- Mapper를 사용하는 Repository의 전체 경로를 적어줘야함. -->
+<mapper namespace="bm.bmthird.mapper.ProductMapper">
+    <insert id="save" parameterType="ProductDto">
+        <!--<selectKey keyProperty="id" resultType="Long" order="BEFORE">
+            SELECT HIBERNATE_SEQUENCE.nextval From DUAL
+        </selectKey>-->
+        INSERT INTO PRODUCT
+        (PTYPE,IDX,PRODUCT_ID,PRODUCT_NAME,PRICE,STOCKQUANTITY,SHORT_INFO,SCORE)
+        VALUES
+        (#{ptype},#{idx},#{product_id},#{product_name},#{price},#{stockQuantity},#{short_info},#{score})
+    </insert>
+    <select id="findAll" resultType="ProductDto">
+        SELECT PTYPE,PRODUCT_ID,PRODUCT_NAME,PRICE,STOCKQUANTITY,SHORT_INFO,IDX
+        FROM PRODUCT
+        ORDER BY CLICK_COUNT DESC
+    </select>
+    <select id="findOne" resultType="ProductDto">
+        SELECT PTYPE,PRODUCT_ID,PRODUCT_NAME,PRICE,STOCKQUANTITY,SHORT_INFO,IDX,CLICK_COUNT,SEARCH_COUNT
+        FROM PRODUCT
+        WHERE PRODUCT_ID=#{product_id}
+    </select>
+    <update id="update" parameterType="java.lang.Long">
+        UPDATE PRODUCT
+        SET CLICK_COUNT=NVL(CLICK_COUNT+1, CLICK_COUNT)
+        WHERE PRODUCT_ID=#{product_id}
+    </update>
+
+    <!--<resultMap id="itemlistmap" type="ItemDto">
+        <result property="dtype" column="DTYPE"/>
+        <result property="id" column="ITEM_ID"/>
+        <result property="name" column="NAME"/>
+        <result property="price" column="PRICE"/>
+        <result property="stockQuantity" column="STOCK_QUANTITY"/>
+    </resultMap>
+    <select id="findAll" resultMap="itemlistmap">
+        SELECT DTYPE, ITEM_ID, NAME, PRICE, STOCK_QUANTITY
+        FROM ITEM
+    </select>
+
+    <select id="findOne" resultMap="itemlistmap">
+        SELECT DTYPE, ITEM_ID, NAME, PRICE, STOCK_QUANTITY
+        FROM ITEM
+        WHERE ITEM_ID=#{id}
+    </select>
+
+    <update id="update" parameterType="ItemDto">
+        &lt;!&ndash;<selectKey keyProperty="id" resultType="ItemDto" order="AFTER">
+            SELECT ITEM_ID
+            FROM ITEM
+        </selectKey>&ndash;&gt;
+        UPDATE ITEM
+        SET NAME=#{name},
+        PRICE=#{price},
+        STOCK_QUANTITY=#{stockQuantity}
+        WHERE
+        ITEM_ID=#{id}
+    </update>-->
+
+</mapper>
